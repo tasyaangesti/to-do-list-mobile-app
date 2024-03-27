@@ -1,6 +1,7 @@
 import {
   Image,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -10,7 +11,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
-import { MapPinIcon } from "react-native-heroicons/solid";
+import { CalendarDaysIcon, MapPinIcon } from "react-native-heroicons/solid";
 
 export default function Home() {
   const [search, setSearch] = useState(false);
@@ -60,11 +61,156 @@ export default function Home() {
                   }`}
                 >
                   <MapPinIcon size={20} color="gray" />
-                  <Text style={styles.resultOfSearch}>London, United Kingdom</Text>
+                  <Text style={styles.resultOfSearch}>
+                    London, United Kingdom
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
           ) : null}
+        </View>
+        {/* forecast */}
+        <View className="mx-4 justify-around flex-1 mb-2">
+          {/* location */}
+          <Text className="text-white text-center text-2xl font-bold">
+            London,
+            <Text className="text-lg font-semibold text-gray-300">
+              United Kingdom
+            </Text>
+          </Text>
+          {/* weather Image */}
+          <View className="flex-row justify-center">
+            <Image
+              source={require("../../assets/cloudy.png")}
+              className="w-64 h-64"
+            />
+          </View>
+          {/* degree */}
+          <View className="space-y-2">
+            <Text className="text-center font-bold text-white text-6xl ml-5">
+              23&#176;
+            </Text>
+            <Text className="text-center text-white text-xl tracking-widest">
+              Partly Cloudy
+            </Text>
+          </View>
+          {/* other stats */}
+          <View className="flex-row justify-between mx-4">
+            <View className="flex-row space-x-2 items-center">
+              <Image
+                source={require("../../assets/wind.png")}
+                className="h-10 w-10"
+              />
+              <Text className="text-white font-semibold text-base">22km</Text>
+            </View>
+            <View className="flex-row space-x-2 items-center">
+              <Image
+                source={require("../../assets/drop.png")}
+                className="h-10 w-10"
+              />
+              <Text className="text-white font-semibold text-base">22%</Text>
+            </View>
+            <View className="flex-row space-x-2 items-center">
+              <Image
+                source={require("../../assets/sun.png")}
+                className="h-10 w-10"
+              />
+              <Text className="text-white font-semibold text-base">
+                6:05 AM
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* forecast next day */}
+        <View className="mb-2 space-y-3">
+          <View className="flex-row items-center mx-5 space-x-2">
+            <CalendarDaysIcon size={22} color="white" />
+            <Text className="text-white text-base"> Daily Forecast</Text>
+          </View>
+          <ScrollView
+            horizontal
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+            showsHorizontalScrollIndicator={false}
+          >
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Monday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Tuesday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Wednesday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Thursday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Friday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Saturday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+            <View
+              className="flex justify-center items-center w-24 rounded-3xl py-3 scroll-py-1 mr-4"
+              style={styles.forecastNextDay}
+            >
+              <Image
+                source={require("../../assets/heavy-rain.png")}
+                className="h-11 w-11"
+              />
+              <Text className="text-white">Sunday</Text>
+              <Text className="text-white text-xl font-semibold">19&#176;</Text>
+            </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </View>
@@ -88,5 +234,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     marginLeft: 10,
+  },
+  forecastNextDay: {
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
   },
 });
