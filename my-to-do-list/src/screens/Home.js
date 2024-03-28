@@ -75,7 +75,7 @@ export default function Home() {
 
   const fetchWeatherData = async () => {
     let myCity = await getData("city");
-    let cityName = "Islamabad";
+    let cityName = "Dubai";
     if (myCity) cityName = myCity;
 
     fetchWeatherForecast({
