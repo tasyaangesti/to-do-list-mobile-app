@@ -9,17 +9,60 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { CalendarDaysIcon, MapPinIcon } from "react-native-heroicons/solid";
+import { debounce } from "lodash";
+import { fetchLocations, fetchWeatherForecast } from "../../api/weather";
 
 export default function Home() {
   const [search, setSearch] = useState(false);
-  const [locations, setLocations] = useState([1, 2, 3]);
+  const [locations, setLocations] = useState([]);
+  const [weather, setWeather] = useState({});
 
-  const handleLocation = (loc) => {
+  const handleLocation = async (loc) => {
     console.log("location,", loc);
+    setLocations([]);
+    setSearch(false);
+
+    try {
+      const data = await fetchWeatherForecast({
+        cityName: loc.name,
+        days: "7",
+      });
+      setWeather(data);
+      console.log("forecast", data);
+    } catch (error) {
+      console.error("Error fetching weather forecast:", error);
+    }
   };
+
+  // const handleSearch = (value) => {
+  //   console.log("value", value);
+  //   if (value.length > 2) {
+  //     fetchLocations({ cityName: value }).then((data) => {
+  //       console.log("loc di search", data);
+  //       setLocations(data);
+  //     });
+  //   }
+  // };
+
+  const handleSearch = useCallback(
+    debounce((value) => {
+      console.log("search value:", value);
+      if (value.length > 2) {
+        fetchLocations({ cityName: value }).then((data) => {
+          console.log("locations:", data);
+          setLocations(data);
+        });
+      }
+    }, 1200),
+    []
+  );
+
+  // const handleTextDebounce = useCallback(debounce(handleSearch, 1200), []);
+
+  const { current, location } = weather;
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -35,6 +78,8 @@ export default function Home() {
           <View style={search ? styles.colSearch : "transparent"}>
             {search ? (
               <TextInput
+                // onChangeText={handleTextDebounce}
+                onChangeText={handleSearch}
                 placeholder="Search for a city"
                 placeholderTextColor="lightgray"
                 className="pl-6 h-10 pb-1 flex-1 text-base"
@@ -51,8 +96,12 @@ export default function Home() {
           </View>
           {locations.length > 0 && search ? (
             <View className="absolute w-full bg-gray-300 top-16 rounded-3xl">
-              {locations.map((item, index) => (
+              {locations.map((loc, index) => (
                 <TouchableOpacity
+                  onPress={() => {
+                    console.log("klik location:", loc);
+                    handleLocation(loc);
+                  }}
                   key={index}
                   className={`flex-row items-center border-0 p-3 px-4 mb-1 ${
                     index + 1 !== locations.length
@@ -62,7 +111,7 @@ export default function Home() {
                 >
                   <MapPinIcon size={20} color="gray" />
                   <Text style={styles.resultOfSearch}>
-                    London, United Kingdom
+                    {loc?.name}, {loc?.country}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -73,15 +122,15 @@ export default function Home() {
         <View className="mx-4 justify-around flex-1 mb-2">
           {/* location */}
           <Text className="text-white text-center text-2xl font-bold">
-            London,
+            {location?.name}
             <Text className="text-lg font-semibold text-gray-300">
-              United Kingdom
+              {" " + location?.country}
             </Text>
           </Text>
           {/* weather Image */}
           <View className="flex-row justify-center">
             <Image
-              source={require("../../assets/cloudy.png")}
+              source={require("../../assets/partly-cloudy.png")}
               className="w-64 h-64"
             />
           </View>
